@@ -192,48 +192,51 @@ export default {
     },
     exportCode() {
       this.showViewer();
-      let appDom = document.getElementById('logic-model-app');
-      let appDomClone = appDom.cloneNode(true);
-      appDomClone.classList.remove("mode--editor");
-      appDomClone.classList.add("mode--viewer");
+      let _this = this;
+      setTimeout(() => {
+        let appDom = document.getElementById('logic-model-app');
+        let appDomClone = appDom.cloneNode(true);
+        appDomClone.classList.remove("mode--editor");
+        appDomClone.classList.add("mode--viewer");
 
-      let exportBlockCssArr = [];
-      for(let i in this.blocks) {
-        let cssString = blockCssTpl.replace(new RegExp('%bordercolor%', 'gi'), this.blocks[i].bordercolor);
-        cssString = cssString.replace(new RegExp('%txtcolor%', 'gi'), this.blocks[i].txtcolor);
-        cssString = cssString.replace(new RegExp('%bgcolor%', 'gi'), this.blocks[i].bgcolor);
-        cssString = cssString.replace(new RegExp('%blockId%', 'gi'), this.blocks[i].id);
-        exportBlockCssArr.push(cssString);
-      }
+        let exportBlockCssArr = [];
+        for(let i in _this.blocks) {
+          let cssString = blockCssTpl.replace(new RegExp('%bordercolor%', 'gi'), _this.blocks[i].bordercolor);
+          cssString = cssString.replace(new RegExp('%txtcolor%', 'gi'), _this.blocks[i].txtcolor);
+          cssString = cssString.replace(new RegExp('%bgcolor%', 'gi'), _this.blocks[i].bgcolor);
+          cssString = cssString.replace(new RegExp('%blockId%', 'gi'), _this.blocks[i].id);
+          exportBlockCssArr.push(cssString);
+        }
 
-      // Preparing export
-      let exportHTMLArr = [
-        '<script>',
-        `var kanban_connections = JSON.parse('${JSON.stringify(this.connections)}');`,
-        `var arrowStyles = JSON.parse('${JSON.stringify(this.arrowStyles)}');`,
-        `var kanban_blocks = JSON.parse('${JSON.stringify(this.blocks)
-            .replace(/[\\]/g, '\\\\')
-            .replace(/[\"]/g, '\\\"')
-            .replace(/[\/]/g, '\\/')
-            .replace(/[\b]/g, '\\b')
-            .replace(/[\f]/g, '\\f')
-            .replace(/[\n]/g, '\\n')
-            .replace(/[\r]/g, '\\r')
-            .replace(/[\t]/g, '\\t')}');`,
-        exportJs,
-        '<\/script>',
-        '<style>',
-        exportCss,
-        exportBlockCssArr.join(''),
-        '<\/style>',
-        appDomClone.outerHTML,
-      ];
+        // Preparing export
+        let exportHTMLArr = [
+          '<script>',
+          `var kanban_connections = JSON.parse('${JSON.stringify(_this.connections)}');`,
+          `var arrowStyles = JSON.parse('${JSON.stringify(_this.arrowStyles)}');`,
+          `var kanban_blocks = JSON.parse('${JSON.stringify(_this.blocks)
+              .replace(/[\\]/g, '\\\\')
+              .replace(/[\"]/g, '\\\"')
+              .replace(/[\/]/g, '\\/')
+              .replace(/[\b]/g, '\\b')
+              .replace(/[\f]/g, '\\f')
+              .replace(/[\n]/g, '\\n')
+              .replace(/[\r]/g, '\\r')
+              .replace(/[\t]/g, '\\t')}');`,
+          exportJs,
+          '<\/script>',
+          '<style>',
+          exportCss,
+          exportBlockCssArr.join(''),
+          '<\/style>',
+          appDomClone.outerHTML,
+        ];
 
-      let exportHTML = exportHTMLArr.join('');
-      exportHTML += `<!--%datasrc:${this.getImportableData()}%-->`;
-      this.exportedHTML = exportHTML;
+        let exportHTML = exportHTMLArr.join('');
+        exportHTML += `<!--%datasrc:${_this.getImportableData()}%-->`;
+        _this.exportedHTML = exportHTML;
 
-      this.toggleExportModal(1);
+        _this.toggleExportModal(1);
+      }, 500);
     },
     getImportableData() {
       let data = {

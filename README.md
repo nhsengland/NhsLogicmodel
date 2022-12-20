@@ -1,3 +1,7 @@
+# ARCHIVED
+
+*This project is no longer maintained*
+
 <div align="center">
   <h1>NHS Logic Model</h1>
   <p>NHS Logic Model is a frontend tool to quickly create task break and workflow diagram.</p>
